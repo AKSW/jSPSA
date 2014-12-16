@@ -18,8 +18,6 @@ import de.uni_leipzig.simba.genetics.evaluation.basics.EvaluationData;
 import de.uni_leipzig.simba.specification.LinkSpec;
 
 
-
-
 public class BasicLinkSpecSPSA {
 	EvaluationData data;
 	LinkSpec child1, child2;
@@ -70,9 +68,15 @@ public class BasicLinkSpecSPSA {
 					);
 
 			double[] ghat = new double[theta.length];
+			if(Math.abs(yplus-yminus)<0.05) //Appropriate termination criteria?
+				return theta;
 			for(int i = 0; i<theta.length; i++) {
 				ghat[i] = (yplus-yminus) / 2*ck[i]*delta[i];
-				theta[i] = theta[i] - ak[i]*ghat[i];
+				
+//				theta[i] = theta[i] - ak[i]*ghat[i];
+				double newValue = theta[i] - ak[i]*ghat[i];
+				if(!(newValue<=0.08 || newValue>1))
+					theta[i] = newValue;
 				System.out.println("\t "+i+": ghat="+ghat[i]+ "=> theta:="+theta[i]);
 			}
 			System.out.println("---next iteration?");
@@ -119,16 +123,22 @@ public class BasicLinkSpecSPSA {
 		return delta;
 	}
 	
-	
+	/**
+	 * Problems: 
+	 * (1)	specify gain sequences and project computed values into interval (0,1] for threholds
+	 * (2)	achieved "good" values are depended on initial guess.s
+	 * @param args
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 		generateBernouilliDistribution(50);
 		BasicLinkSpecSPSA test = new BasicLinkSpecSPSA();
 		double[] theta = new double[2];
-		theta[0] = 0.3;
-		theta[1] = 0.8;
-		double p = 0.5d;
-		double a = 0.5;
-		double A = 1; 
+		theta[0] = 0.5;
+		theta[1] = 0.5;
+		double p = 0.5d; // not yet regarded
+		double a = 1;
+		double A = 0; 
 		double c = 0.5; 
 		double alpha = 0.602d;//1
 		double gamma = 0.101d;// 1/6

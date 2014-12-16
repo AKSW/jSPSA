@@ -53,13 +53,16 @@ public class LinkSpecEvaluator implements IEvaluator{
 			logger.warn("Number of childs("+childs.size()+") is different from number of parameters theta("+theta.size()+")");
 		}
 		for(int i = 0; i<Math.min(childs.size(), theta.size()); i++) {
+//			if(!(theta.get(i) >= 0.05 && theta.get(i)<1.01))
+//				return 1d;
 			LinkSpec child = childs.get(i);
-			child.threshold = Math.min(Math.max(theta.get(i),0.1d),1);
+			child.threshold = Math.min(Math.max(theta.get(i),0.08d),1);
 			spec.addChild(child);
 			spec.threshold = Math.min(spec.threshold, child.threshold);
 		}		
 		m = engine.runNestedPlan(planner.plan(spec));
 		double f = pfm.computeFScore(m, data.getReferenceMapping());
+	
 		return -1*f;//smaller values are better
 	}
 
