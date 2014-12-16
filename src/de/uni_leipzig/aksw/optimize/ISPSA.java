@@ -1,5 +1,6 @@
 package de.uni_leipzig.aksw.optimize;
 
+import java.util.Map;
 import java.util.Vector;
 
 import de.uni_leipzig.aksw.evaluate.IEvaluator;
@@ -30,4 +31,6 @@ public interface ISPSA {
 	 */
 	public Vector<Double> runSPSA(int n, Vector<Double> theta, 
 			double p, double a, double A, double c, double alpha, double gamma);
+	
+	public Map<Integer, String> getDebugLog();
 }
